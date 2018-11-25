@@ -7,8 +7,8 @@ $(function() {
    submitImage();
    var datas={};
    function showImage_haibao(){
-    var count=0;
-    var tmpl = '<li class="weui-uploader__file" style="background-image:url(#url#)"></li>',  
+        var count=0;
+        var tmpl = '<li class="weui-uploader__file" style="background-image:url(#url#)"></li>',  
             $gallery = $("#galleryhaibao"),  
             $galleryImg = $("#galleryhaibaoImg"),  
             $uploaderInput = $("#uploaderhaibaoInput"),  
@@ -103,21 +103,6 @@ $(function() {
         // alert(haibaoimages);
         // alert(haibaoimages[0]);
     });
-        // $("#user-info-submit").click(function(){
-        //     // $.ajax({
-        //     //     url:"",
-        //     //         method:"post",
-        //     //         data:{
-        //     //             haibaoimage:haibaoimages[0],
-
-        //     //         },success:function(res){
-        //     //             console.log(res);
-                        
-        //     //         }
-        //     //     });
-        //     console.log(haibaoimages[0]);
-        //     // datas.card=haibaoimages[0];
-        // })
     }
     // 暂时设个全局变量保存是否需要上传图片
     var img_is_need_upload = false;
@@ -254,7 +239,8 @@ $(function() {
                 return;
             }
             //flag==true带表有图片，就不用传
-            if(flag==true){
+
+            if(haibaoimages[0]==""&&flag==true){
                 datas = {
                     nickname: $("#user-name-edit").val(),
                     sex: $('input:radio:checked').val(),
@@ -337,7 +323,7 @@ $(function() {
     }
     /*上传其他数据的回调函数*/
     function uploadOtherData(datas) {
-        console.log(datas.valueOf());
+        // console.log(datas.valueOf());
         $.post(ServerUrl + "my/edit", datas, function(data) {
             $.hideLoading();
             if (data.status == Status.Status_OK) {
@@ -455,5 +441,10 @@ $(function() {
             });
         }
     }
+    //点击问号
+    $(".question").click(function(){
+        $.alert("一卡通作为隐私被保护，生活照所有人可见");
+    })
+
 
 });

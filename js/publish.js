@@ -129,7 +129,7 @@ submitImage();
     /*表单的一些参数*/
     var task_params = {
         /*任务名称的最大长度*/
-        task_name_length: 10,
+        task_name_length: 20,
         /*任务描述的最大长度*/
         task_describe_length: 200,
         /*私密信息的最大长度*/

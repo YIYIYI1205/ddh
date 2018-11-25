@@ -3,6 +3,34 @@
  */
 $(function() {
 
+
+
+    // $.ajax({
+    //         url:,
+    //         method:"get",
+    //         params:{
+    //             product_id:theRequest.msg,
+    //             openid:theRequest.openid,
+    //             usertype:theRequest.usertype
+    //         }
+    //     }).success(function(resResult){
+    //         // console.log(resResult); 
+    //         var haibao=$.parseJSON(resResult).result;
+    //         // console.log('http://www.lexianglive.com/'+haibao);
+    //         var pb = $.photoBrowser({
+    //             // 这里items后面要加[]，不加就报错
+    //             items: ['http://www.lexianglive.com/'+haibao],
+    //             onOpen: function() {},
+    //             onClose: function() {}
+    //         });
+    //         $(".share").click(function(){
+    //             pb.open();
+
+    //         }) 
+    //     }) 
+    // });  
+
+
     var link_params = [
         { link_id: 1, link_text: "微信号", link_input_type: "text" },
         { link_id: 2, link_text: "QQ号", link_input_type: "number" },
@@ -33,7 +61,7 @@ $(function() {
 
     /* 执行入口 */
     getData(function(datas) {
-        console.log(datas);
+        // console.log(datas);
         var task = datas.task;
         /* 预处理数据：处理私密信息和联系方式 */
         // task.catId != 4 表示不是组队

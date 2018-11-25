@@ -49,13 +49,13 @@ $(function() {
                 /*还没有选择学校*/
                 change_school_alert();
             } else if (data.status == Status.Status_OK) {
-                schoolName = data.data.schoolName;
+                // schoolName = data.data.schoolName;
                 /*初始化学校*/
-                $("#school").text(subString(schoolName, 4, "..."));
-                /*设置学校的点击事件*/
-                $("#change-school").click(function() {
-                    change_school();
-                });
+                // $("#school").text(subString(schoolName, 4, "..."));
+                // /*设置学校的点击事件*/
+                // $("#change-school").click(function() {
+                //     change_school();
+                // });
                 /*初始化学校之后，初始化类型*/
                 initTaskType(callback_initTaskList, callback_typeClick);
             } else {
