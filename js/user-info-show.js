@@ -83,7 +83,7 @@ $(function() {
         }
         //如果用户没有上传学生证，使用默认提示图（也就是不变）
         if (datas[0].card != null) {
-            var card_img = "../../../" + datas[0].card;
+            var card_img = "../../../" + datas[0].lifeImage;
             $("#user-card-show img").attr("src", card_img);
         }
     }

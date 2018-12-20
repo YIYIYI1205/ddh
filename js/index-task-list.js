@@ -149,7 +149,7 @@ $(function() {
             pageSize: size,
             type: type_id,
             sortType: sort_id,
-            school: school
+            school: "西安电子科技大学"
         }, function(data) {
             if (data.status == Status.Status_OK) {
                 var datas = data.data;

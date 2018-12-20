@@ -1,109 +1,202 @@
 /**
  * Created by fengziboboy on 2017/11/17.
  */
-$(function() {
+$(function () {
 
-   showImage_haibao();
-   submitImage();
-   var datas={};
-   function showImage_haibao(){
-        var count=0;
-        var tmpl = '<li class="weui-uploader__file" style="background-image:url(#url#)"></li>',  
-            $gallery = $("#galleryhaibao"),  
-            $galleryImg = $("#galleryhaibaoImg"),  
-            $uploaderInput = $("#uploaderhaibaoInput"),  
-            $uploaderFiles = $("#uploaderhaibaoFiles");  
-            $uploaderInput.on("change", function(e) {  
-                var srchaibao, url = window.URL || window.webkitURL || window.mozURL,  
+    showImage_haibao();
+    submitImage();
+    var datas = {};
+
+    function showImage_haibao() {
+        var count = 0;
+        var tmpl = '<li class="weui-uploader__file" style="background-image:url(#url#)"></li>',
+            $gallery = $("#galleryhaibao"),
+            $galleryImg = $("#galleryhaibaoImg"),
+            $uploaderInput = $("#uploaderhaibaoInput"),
+            $uploaderFiles = $("#uploaderhaibaoFiles");
+        $uploaderInput.on("change", function (e) {
+            var srchaibao, url = window.URL || window.webkitURL || window.mozURL,
                 files = e.target.files;
-                for(var i = 0, len = files.length; i < len; ++i) {
-                    count++;
-                    if(count>0){
-                         $("#weui-uploader__input-box_haibao").css('display','none');
-                    }
-                    if(count>1){
-                        alert("只能上传1张图片");
-                        return;
-                    }
-                    var file = files[i];
-                    if(url) {  
-                        srchaibao = url.createObjectURL(file);  
-                    } else {  
-                        srchaibao = e.target.result;  
-                    }  
-                    $uploaderFiles.append($(tmpl.replace('#url#', srchaibao)));  
-                }  
-            });  
+            for (var i = 0, len = files.length; i < len; ++i) {
+                count++;
+                if (count > 0) {
+                    $("#weui-uploader__input-box_haibao_file").css('display', 'none');
+                }
+                if (count > 1) {
+                    alert("只能上传1张图片");
+                    return;
+                }
+                var file = files[i];
+                if (url) {
+                    srchaibao = url.createObjectURL(file);
+                } else {
+                    srchaibao = e.target.result;
+                }
+                $uploaderFiles.append($(tmpl.replace('#url#', srchaibao)));
+            }
+        });
         var index; //第几张图片  
-        $uploaderFiles.on("click", "li", function() {  
-            index = $(this).index();  
-            $galleryImg.attr("style", this.getAttribute("style"));  
-            $gallery.fadeIn(100);  
-        });  
+        $uploaderFiles.on("click", "li", function () {
+            index = $(this).index();
+            $galleryImg.attr("style", this.getAttribute("style"));
+            $gallery.fadeIn(100);
+        });
         //点击span隐藏，不要直接点gallery就隐藏，删不掉图片
-        $("#galleryhaibaoImg").click(function() { 
-            $gallery.fadeOut(100);  
-        });  
+        $("#galleryhaibaoImg").click(function () {
+            $gallery.fadeOut(100);
+        });
         //删除图片  
-        $(".weui-gallery__del").click(function() { 
-            count=$uploaderFiles[0].children.length-1;
-            $("#weui-uploader__input-box_haibao").css('display','block');
-            $gallery.fadeOut(100);  
-            $uploaderFiles.find("li").eq(index).remove();  
-        });  
-    }   
-    var haibaoimages=[];
-    var haibaocount=0;
-    function submitImage(){
-        
+        $(".deleteCard").click(function () {
+            console.log(this);
+            count = $uploaderFiles[0].children.length - 1;
+            $("#weui-uploader__input-box_haibao_file").css('display', 'block');
+            $gallery.fadeOut(100);
+            $uploaderFiles.find("li").eq(index).remove();
+        });
+    }
+
+    var haibaoimages = [];
+    var haibaocount = 0;
+
+    function submitImage() {
         // var haibaoimage="";
         $('.haibao_file').on('change', function (event) {
-        var files = event.target.files;
-        for (var i = 0, len = files.length; i < len; i++) {
-            haibaocount++;
-            if(haibaocount>1){
-                return;
-            }  
-            var file = files[i];
-            var size=file.size;
-            if(size>1024*1024*5){
-                return;
-            }  
-            var file = files[i];
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                var haibaoimage = new Image();
-                haibaoimage.src = e.target.result;         
-                haibaoimage.onload = function () {  
-                    // console.log("123");
-                    // 不要超出最大宽度  
-                    var w = Math.min(10000, haibaoimage.width);  
-                    // 高度按比例计算  
-                    var h = haibaoimage.height * (w / haibaoimage.width);  
-                    var canvas = document.createElement('canvas');  
-                    var ctx = canvas.getContext('2d');  
-                    // 设置 canvas 的宽度和高度  
-                    canvas.width = w;  
-                    canvas.height = h;  
-                    ctx.drawImage(haibaoimage, 0, 0, w, h); 
-　　　　　　　　　　　　
-                    var base64 = canvas.toDataURL('image/jpeg',0.6);  
-                    // console.log(base64);
-                   //console.log(base64);
-                    // 插入到预览区  
-
-                    haibaoimages.push(base64);
-                    // alert("123");
+            var files = event.target.files;
+            for (var i = 0, len = files.length; i < len; i++) {
+                haibaocount++;
+                if (haibaocount > 1) {
+                    return;
                 }
-                
-            };
-            reader.readAsDataURL(file);
-        }
-        console.log(haibaoimages);
-        // alert(haibaoimages);
-        // alert(haibaoimages[0]);
-    });
+                var file = files[i];
+                var size = file.size;
+                var file = files[i];
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var haibaoimage = new Image();
+                    haibaoimage.src = e.target.result;
+                    haibaoimage.onload = function () {
+                        // console.log("123");
+                        // 不要超出最大宽度  
+                        var w = Math.min(10000, haibaoimage.width);
+                        // 高度按比例计算  
+                        var h = haibaoimage.height * (w / haibaoimage.width);
+                        var canvas = document.createElement('canvas');
+                        var ctx = canvas.getContext('2d');
+                        // 设置 canvas 的宽度和高度  
+                        canvas.width = w;
+                        canvas.height = h;
+                        ctx.drawImage(haibaoimage, 0, 0, w, h);
+                        var base64 = canvas.toDataURL('image/jpeg', 0.6);
+                        // console.log(base64);
+                        //console.log(base64);
+                        // 插入到预览区  
+                        haibaoimages.push(base64);
+                        // alert("123");
+                    }
+
+                };
+                reader.readAsDataURL(file);
+            }
+        });
     }
+
+    showImage_life();
+    submitImage_life();
+
+    function showImage_life() {
+        var count = 0;
+        var tmpl = '<li class="weui-uploader__file" style="background-image:url(#url#)"></li>',
+            $gallery = $("#gallerylife"),
+            $galleryImg = $("#gallerylifeImg"),
+            $uploaderInput = $("#uploaderlifeInput"),
+            $uploaderFiles = $("#uploaderlifeFiles");
+        $uploaderInput.on("change", function (e) {
+            var srclife, url = window.URL || window.webkitURL || window.mozURL,
+                files = e.target.files;
+            for (var i = 0, len = files.length; i < len; ++i) {
+                count++;
+                if (count > 0) {
+                    $("#weui-uploader__input-box_life").css('display', 'none');
+                }
+                if (count > 1) {
+                    alert("只能上传1张图片");
+                    return;
+                }
+                var file = files[i];
+                if (url) {
+                    srclife = url.createObjectURL(file);
+                } else {
+                    srclife = e.target.result;
+                }
+                $uploaderFiles.append($(tmpl.replace('#url#', srclife)));
+            }
+        });
+        var index; //第几张图片  
+        $uploaderFiles.on("click", "li", function () {
+            index = $(this).index();
+            $galleryImg.attr("style", this.getAttribute("style"));
+            $gallery.fadeIn(100);
+        });
+        //点击span隐藏，不要直接点gallery就隐藏，删不掉图片
+        $("#gallerylifeImg").click(function () {
+            $gallery.fadeOut(100);
+        });
+        //删除图片  
+        $(".deleteLife").click(function () {
+            count = $uploaderFiles[0].children.length - 1;
+            $("#weui-uploader__input-box_life").css('display', 'block');
+            $gallery.fadeOut(100);
+            $uploaderFiles.find("li").eq(index).remove();
+        });
+    }
+
+    var lifeimages = [];
+    var lifecount = 0;
+
+    function submitImage_life() {
+        // var haibaoimage="";
+        $('.life_file').on('change', function (event) {
+            var files = event.target.files;
+            for (var i = 0, len = files.length; i < len; i++) {
+                lifecount++;
+                if (lifecount > 1) {
+                    return;
+                }
+                var file = files[i];
+                var size = file.size;
+                var file = files[i];
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var lifeimage = new Image();
+                    lifeimage.src = e.target.result;
+                    console.log(lifeimage)
+                    var base64=e.target.result;
+                    // 插入到预览区
+                    lifeimages.push(base64);
+                    console.log(lifeimages)
+                    // lifeimage.onload = function () {
+                    //     // 不要超出最大宽度
+                    //     var w = Math.min(10000, lifeimage.width);
+                    //     // 高度按比例计算
+                    //     var h = lifeimage.height * (w / lifeimage.width);
+                    //     var canvas = document.createElement('canvas');
+                    //     var ctx = canvas.getContext('2d');
+                    //     // 设置 canvas 的宽度和高度
+                    //     canvas.width = w;
+                    //     canvas.height = h;
+                    //     ctx.drawImage(lifeimage, 0, 0, w, h);
+                    //     var base64 = canvas.toDataURL('image/jpeg', 0.6);
+                    //     // 插入到预览区
+                    //     lifeimages.push(base64);
+                    //     console.log(base64);
+                    // }
+
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
     // 暂时设个全局变量保存是否需要上传图片
     var img_is_need_upload = false;
     var img_url = "";
@@ -115,9 +208,10 @@ $(function() {
     submit_form();
 
     /*获取省份列表 */
+
     // 只是省份
     function getAllprovince(callback) {
-        $.get(ServerUrl + "school/allProvinces", function(datas) {
+        $.get(ServerUrl + "school/allProvinces", function (datas) {
             if (datas.status == Status.Status_OK) {
                 var $link = $("#user-address-edit").empty();
                 //添加一个选项
@@ -134,37 +228,49 @@ $(function() {
         })
     }
 
-
     /*设置点击事件*/
     function clickEvent() {
         /*改变地区省份时，学校选项列表改变*/
-        $("#user-address-edit").change(function() {
+        $("#user-address-edit").change(function () {
             var provinceId = $("#user-address-edit").val();
             if ((provinceId != "") && (provinceId != null)) {
                 getSchoolList(provinceId);
             }
         });
         //只改学校时，避免出现因为没电省份修改而没加载出学校列表
-        $("#user-school-edit").focus(function() {
+        $("#user-school-edit").focus(function () {
             var provinceId = $("#user-address-edit").val();
             if ((provinceId != "") && (provinceId != null)) {
                 getSchoolList(provinceId);
             }
         });
     }
+
     // flag用于判断图片存不存在
-    var flag=false;
-    var originalCard="";
+    var flag = false;
+    var originalCard = "";
+    var flagLife = false;
+    var originalLifeImage = "";
+
     //编辑个人数据（若原本就有数据需默认填写）
     function editUserInfo() {
         /*获取编辑页面数据*/
-        $.get(ServerUrl + "my/user", function(datas) {
+        $.get(ServerUrl + "my/user", function (datas) {
             //处理展示个人资料
-            console.log(datas);
-            if(datas.data[0].card!=""||datas.data[0].card!=undefined){
-                flag=true;
-                originalCard=datas.data[0].card;
-                console.log(flag);
+            //如果一卡通已经存在就把原先的上传，并且隐藏删除符号
+            if (datas.data[0].card != "" || datas.data[0].card != undefined) {
+                $(".deleteCard").hide();
+                flag = true;
+                originalCard = datas.data[0].card;
+            }
+            //如果一卡通审核未通过显示删除符号
+            if(datas.data[0].checkFlag==0){
+                $.alert("一卡通审核未通过，请重新上传")
+                $(".deleteCard").show();
+            }
+            if (datas.data[0].lifeImage != "" || datas.data[0].lifeImage != undefined) {
+                flagLife = true;
+                originalLifeImage = datas.data[0].lifeImage;
             }
             if (datas.status == Status.Status_OK) {
                 $.toast("数据获取成功");
@@ -199,18 +305,25 @@ $(function() {
         /*设置图片*/
         // dealImage(datas[0].card);
         // 如果datas[0].card为空就什么都不做，如果不为空就加在input上
-        if(datas[0].card!=null){
-           var tmpl = '<li class="weui-uploader__file" style="background-image:url(#url#)"></li>';
+        if (datas[0].card != null) {
+            var tmpl = '<li class="weui-uploader__file" style="background-image:url(#url#)"></li>';
             var $uploaderFiles = $("#uploaderhaibaoFiles");
-            var card="http://timeseller.fantasy512.cn/ddh/"+datas[0].card;
-            $uploaderFiles.append($(tmpl.replace('#url#', card))); 
-             $("#weui-uploader__input-box_haibao").css('display','none');
+            var card = "http://timeseller.fantasy512.cn/ddh/" + datas[0].card;
+            $uploaderFiles.append($(tmpl.replace('#url#', card)));
+            $("#weui-uploader__input-box_haibao_file").css('display', 'none');
+        }
+        if (datas[0].lifeImage != null) {
+            var tmpl = '<li class="weui-uploader__file" style="background-image:url(#url#)"></li>';
+            var $uploaderFiles = $("#uploaderlifeFiles");
+            var lifeImage = "http://timeseller.fantasy512.cn/ddh/" + datas[0].lifeImage;
+            $uploaderFiles.append($(tmpl.replace('#url#', lifeImage)));
+            $("#weui-uploader__input-box_life").css('display', 'none');
         }
     }
 
     /*根据省份取值获取学校列表*/
     function getSchoolList(provinceId, haveSchoolId) {
-        $.get(ServerUrl + "school/getSchoolByPid/" + provinceId, function(datas) {
+        $.get(ServerUrl + "school/getSchoolByPid/" + provinceId, function (datas) {
             if (datas.status == Status.Status_OK) {
                 var $link = $("#user-school-edit").empty();
                 var selectSchoolList = datas.data;
@@ -230,36 +343,65 @@ $(function() {
 
     /*提交表单*/
     function submit_form() {
-        $("#user-info-submit").click(function() {
-            console.log(haibaoimages[0]);
-            console.log(flag);
-            console.log(originalCard);
-            if (haibaoimages[0]==""&&flag==false) {
+        $("#user-info-submit").click(function () {
+            if (haibaoimages[0] == "" && flag == false) {
                 alert("请上传学生证");
                 return;
             }
-            //flag==true带表有图片，就不用传
-
-            if(haibaoimages[0]==""&&flag==true){
-                datas = {
-                    nickname: $("#user-name-edit").val(),
-                    sex: $('input:radio:checked').val(),
-                    qq: $("#user-qq-edit").val(),
-                    phone: $("#user-tel-edit").val(),
-                    weixin: $("#user-weixin-edit").val(),
-                    schoolId: $("#user-school-edit").val(),
-                    card: originalCard
-                };
-            }else{
-                datas = {
-                    nickname: $("#user-name-edit").val(),
-                    sex: $('input:radio:checked').val(),
-                    qq: $("#user-qq-edit").val(),
-                    phone: $("#user-tel-edit").val(),
-                    weixin: $("#user-weixin-edit").val(),
-                    schoolId: $("#user-school-edit").val(),
-                    card: haibaoimages[0]
-                };
+            //一卡通已经存在
+            if (haibaoimages[0] == "" && flag == true) {
+                //生活照已经存在且没有并且没有上传新的生活照
+                if (flagLife == true && lifeimages[0] == "") {
+                    datas = {
+                        nickname: $("#user-name-edit").val(),
+                        sex: $('input:radio:checked').val(),
+                        qq: $("#user-qq-edit").val(),
+                        phone: $("#user-tel-edit").val(),
+                        weixin: $("#user-weixin-edit").val(),
+                        schoolId: $("#user-school-edit").val(),
+                        card: originalCard,
+                        lifeImage: originalLifeImage
+                    };
+                } else {
+                    //生活照没传，或者生活照传过了要修改，都传lifeImage，它可以不传
+                    datas = {
+                        nickname: $("#user-name-edit").val(),
+                        sex: $('input:radio:checked').val(),
+                        qq: $("#user-qq-edit").val(),
+                        phone: $("#user-tel-edit").val(),
+                        weixin: $("#user-weixin-edit").val(),
+                        schoolId: $("#user-school-edit").val(),
+                        card: originalCard,
+                        lifeImage: lifeimages[0]
+                    };
+                }
+                // 一卡通不存在，必须传
+            } else {
+                //生活照已经存在且没有并且没有上传新的生活照
+                if (flagLife == true && lifeimages[0] == "") {
+                    datas = {
+                        nickname: $("#user-name-edit").val(),
+                        sex: $('input:radio:checked').val(),
+                        qq: $("#user-qq-edit").val(),
+                        phone: $("#user-tel-edit").val(),
+                        weixin: $("#user-weixin-edit").val(),
+                        schoolId: $("#user-school-edit").val(),
+                        card: haibaoimages[0],
+                        lifeImage: originalLifeImage
+                    };
+                } else {
+                    //生活照没传，或者生活照传过了要修改，都传lifeImage，它可以不传
+                    datas = {
+                        nickname: $("#user-name-edit").val(),
+                        sex: $('input:radio:checked').val(),
+                        qq: $("#user-qq-edit").val(),
+                        phone: $("#user-tel-edit").val(),
+                        weixin: $("#user-weixin-edit").val(),
+                        schoolId: $("#user-school-edit").val(),
+                        card: haibaoimages[0],
+                        lifeImage: lifeimages[0]
+                    };
+                }
             }
             // alert(haibaoimages[0].slice(0,20));
             /*获取并组装表单项*/
@@ -287,7 +429,7 @@ $(function() {
             }
 
             /*上传服务器*/
-            $.confirm("确定修改个人信息吗？", function() {
+            $.confirm("确定修改个人信息吗？", function () {
                 uploadData(datas);
             });
 
@@ -307,6 +449,7 @@ $(function() {
      * 3.前端根据mediaId请求自己的服务器去微信的服务器下载图片,返回资源地址;
      * 4.前端根据资源地址获取图片;
      */
+
     /*上传数据到服务器*/
     function uploadData(datas) {
         /**
@@ -315,60 +458,97 @@ $(function() {
          **/
         $.showLoading("资料上传中");
         /*如果需要上传图片则上传图片，否则上传数据*/
-        if(img_is_need_upload){
+        if (flagLife || flag) {
             uploadImage(datas, uploadOtherData);
-        }else{
+        } else {
             uploadOtherData(datas);
         }
     }
+
     /*上传其他数据的回调函数*/
     function uploadOtherData(datas) {
         // console.log(datas.valueOf());
-        $.post(ServerUrl + "my/edit", datas, function(data) {
+        $.post(ServerUrl + "my/edit", datas, function (data) {
             $.hideLoading();
             if (data.status == Status.Status_OK) {
-                $.alert("信息上传成功", function() {
+                $.alert("信息上传成功", function () {
                     var userId = $("#user-info-edit").attr("user-id");
                     location.href = ServerUrl + "web/wechat/view/user-show.html?id=" + userId;
                 });
             } else {
-                $.alert("信息上传失败", function() {});
+                $.alert("信息上传失败", function () {
+                });
             }
         });
     }
+
     /*上传图片：并行上传*/
     function uploadImage(datas, callback) {
-        var localId = datas.card;
+        var localId = datas.lifeImage;
         /*没有图片，直接上传*/
-        if (localId.length == 0) callback(datas);
-
-        wx.uploadImage({
-            localId: localId, // 需要上传的图片的本地ID，由chooseImage接口获得
-            isShowProgressTips: 0, // 默认为1，显示进度提示
-            success: function(res) {
-                var serverId = res.serverId; // 返回图片的服务器端ID
-                /*请求服务器下载图片*/
-                downImage(serverId, function(data) {
-                    /*图片上传成功*/
-                    if (data.status == Status.Status_OK) {
-                        /*添加图片地址后上传数据*/
-                        datas.card = data.data;
-                        /*通过回调上传数据*/
-                        callback(datas);
-                    } else {
-                        $.alert("数据上传出现错误1：" + data.status, function() {
-                            $.hideLoading();
-                        });
-                    }
-                });
-            },
-            fail: function(res) {
-                $.alert("数据上传出现错误fail--：" + JSON.stringify(res), function() {
-                    $.hideLoading();
-                });
-            }
-        });
+        if(localId==undefined) {
+            datas.lifeImage=null
+        }
+        if (localId != undefined && localId != '' && localId.length != 0) {
+            wx.uploadImage({
+                localId: localId, // 需要上传的图片的本地ID，由chooseImage接口获得
+                isShowProgressTips: 0, // 默认为1，显示进度提示
+                success: function (res) {
+                    var serverId = res.serverId; // 返回图片的服务器端ID
+                    /*请求服务器下载图片*/
+                    downImage(serverId, function (data) {
+                        /*图片上传成功*/
+                        if (data.status == Status.Status_OK) {
+                            /*添加图片地址后上传数据*/
+                            datas.lifeImage = data.data;
+                        } else {
+                            $.alert("数据上传出现错误1：" + data.status, function () {
+                                $.hideLoading();
+                            });
+                        }
+                    });
+                },
+                fail: function (res) {
+                    $.alert("数据上传出现错误fail--：" + JSON.stringify(res), function () {
+                        $.hideLoading();
+                    });
+                }
+            });
+        }
+        var localId = datas.card;
+        if(localId==undefined) {
+            datas.card=null
+        }
+        if (localId != undefined && localId != '' && localId.length != 0) {
+            wx.uploadImage({
+                localId: localId, // 需要上传的图片的本地ID，由chooseImage接口获得
+                isShowProgressTips: 0, // 默认为1，显示进度提示
+                success: function (res) {
+                    var serverId = res.serverId; // 返回图片的服务器端ID
+                    /*请求服务器下载图片*/
+                    downImage(serverId, function (data) {
+                        /*图片上传成功*/
+                        if (data.status == Status.Status_OK) {
+                            /*添加图片地址后上传数据*/
+                            datas.card = data.data;
+                        } else {
+                            $.alert("数据上传出现错误1：" + data.status, function () {
+                                $.hideLoading();
+                            });
+                        }
+                    });
+                },
+                fail: function (res) {
+                    $.alert("数据上传出现错误fail--：" + JSON.stringify(res), function () {
+                        $.hideLoading();
+                    });
+                }
+            });
+        }
+        /*通过回调上传数据*/
+        callback(datas);
     }
+
     /*---------------------- 提交表单 -----------------------*/
     /*-------------------------------------------------------*/
 
@@ -382,11 +562,11 @@ $(function() {
         }
 
         /*关闭*/
-        $("#uploaderFiles-gallery span").click(function() {
+        $("#uploaderFiles-gallery span").click(function () {
             $(this).parent().hide();
         });
         /*删除*/
-        $("#uploaderFiles-gallery i").click(function() {
+        $("#uploaderFiles-gallery i").click(function () {
             /*隐藏*/
             $("#uploaderFiles-gallery").hide();
             /*删除*/
@@ -401,14 +581,14 @@ $(function() {
             $("#uploaderInput").parent().show();
         });
         /*添加*/
-        $("#uploaderInput").click(function() {
+        $("#uploaderInput").click(function () {
             var count = $("#uploaderFiles li").size();
             if (count >= 1) return;
             wx.chooseImage({
                 count: 1, // 默认9
                 sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
                 sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-                success: function(res) {
+                success: function (res) {
                     // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
                     img_url = res.localIds[0];
                     img_is_need_upload = true;
@@ -429,7 +609,7 @@ $(function() {
         /*绑定图片点击事件*/
         function imageClickEvent() {
             /*显示某一张图片*/
-            $("#uploaderFiles li").off("click").on("click", function() {
+            $("#uploaderFiles li").off("click").on("click", function () {
                 var img = $(this).css("background-image");
                 var $span = $("#uploaderFiles-gallery span");
                 $span.css("background-image", img).hide();
@@ -441,8 +621,9 @@ $(function() {
             });
         }
     }
+
     //点击问号
-    $(".question").click(function(){
+    $(".question").click(function () {
         $.alert("一卡通作为隐私被保护，生活照所有人可见");
     })
 

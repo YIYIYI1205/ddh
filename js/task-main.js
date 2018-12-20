@@ -3,34 +3,6 @@
  */
 $(function() {
 
-
-
-    // $.ajax({
-    //         url:,
-    //         method:"get",
-    //         params:{
-    //             product_id:theRequest.msg,
-    //             openid:theRequest.openid,
-    //             usertype:theRequest.usertype
-    //         }
-    //     }).success(function(resResult){
-    //         // console.log(resResult); 
-    //         var haibao=$.parseJSON(resResult).result;
-    //         // console.log('http://www.lexianglive.com/'+haibao);
-    //         var pb = $.photoBrowser({
-    //             // 这里items后面要加[]，不加就报错
-    //             items: ['http://www.lexianglive.com/'+haibao],
-    //             onOpen: function() {},
-    //             onClose: function() {}
-    //         });
-    //         $(".share").click(function(){
-    //             pb.open();
-
-    //         }) 
-    //     }) 
-    // });  
-
-
     var link_params = [
         { link_id: 1, link_text: "微信号", link_input_type: "text" },
         { link_id: 2, link_text: "QQ号", link_input_type: "number" },
@@ -94,13 +66,50 @@ $(function() {
         /* 初始化图片 */
         if(task.images!=""&&task.images!=null){
             task.images=task.images.slice(1).split(";");
-            console.log(task.images);
             init_image(task.images);
         }
     });
+    getShare(taskId);
+    var shareimage=[];
+    //获取分享图片
+    function getShare(taskId){
+        $.get(ServerUrl + "task/getShareTask/" + taskId, function(data) {
+            var share="http://timeseller.fantasy512.cn/"+data.data.substring(data.data.indexOf("ddh"),data.data.length);
+            shareimage.push(share)
+            var pb = $.photoBrowser({
+                // 这里items后面要加[]，不加就报错
+                items: ["http://timeseller.fantasy512.cn/"+data.data.substring(data.data.indexOf("ddh"),data.data.length)],
+                onOpen: function() {},
+                onClose: function() {}
+            });
+            $("#share").click(function(){
+                pb.open();
+            }) 
+        });
+    }
+
+
+
 
     function getData(callback_deal_data) {
         $.get(ServerUrl + "task/task/" + taskId, function(data) {
+            console.log(data)
+            // alert(data.data.userFlag);
+            if(data.data.userFlag=="userId=0用户没有关注公众号"){
+                $.alert("请关注公众号",function(){
+                    location.href="https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzUxNjQwOTk4MA==#wechat_redirect"
+                })
+            }else if(data.data.userFlag=="checkFlag=0是未审核"||data.data.userFlag=="checkFlag=null要上传照片"){
+                $.alert("一卡通审核未通过",function(){
+                    location.href="./user-edit.html"
+                })
+            }
+
+            // if(data.data.userInfo.checkFlag==0){
+            //     $.alert("一卡通审核未通过",function(){
+            //         location.href="./user-edit.html"
+            //     })
+            // }
             if (data.status == Status.Status_OK) {
                 status.statusCode = data.data.statusCode;
                 if (status.statusCode != status.error && data.data.task && data.data.task != null) { /* 处理数据 */
